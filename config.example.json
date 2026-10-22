@@ -1,0 +1,15 @@
+{
+  "InterfaceName": "WLAN",
+  "PrimaryProfile": "",
+  "FallbackProfile": "",
+  "PollSeconds": 60,
+  "FailureThreshold": 3,
+  "PrimaryAttempts": 2,
+  "ConnectWaitSeconds": 25,
+  "CooldownSeconds": 300,
+  "ProbeTimeoutSeconds": 5,
+  "Probes": [
+    { "Url": "http://www.msftconnecttest.com/connecttest.txt", "ExpectedBody": "Microsoft Connect Test" },
+    { "Url": "http://detectportal.firefox.com/canonical.html", "ExpectedBody": "<meta http-equiv=\"refresh\" content=\"0;url=https://support.mozilla.org/kb/captive-portal\"/>" }
+  ]
+}

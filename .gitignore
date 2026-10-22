@@ -1,0 +1,6 @@
+/config.json
+/logs/
+/watchdog.log*
+/config-*.tmp*
+/test-logs-*/
+/test-management-*/
