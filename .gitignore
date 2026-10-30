@@ -4,3 +4,6 @@
 /config-*.tmp*
 /test-logs-*/
 /test-management-*/
+/WifiWatchdog.exe
+/host-build-*.exe
+/test-host-*/

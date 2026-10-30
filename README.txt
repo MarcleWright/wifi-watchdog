@@ -3,6 +3,12 @@ Wi-Fi 自动恢复（Windows PowerShell 5.1）
 Windows 本地 Wi-Fi 自动恢复工具：主网络不可用时重连，失败后切换到备用网络。
 可复制整个文件夹离线使用。无需下载依赖，使用 Windows 自带 netsh、curl.exe 和 PowerShell。
 密码由 Windows 已保存的 Wi-Fi 配置管理，脚本不读取或保存密码。
+后台进程名称为 WifiWatchdog.exe，任务管理器可按此名称识别，不再显示为 powershell.exe。
+安装/启用后台时用 Windows 自带 .NET Framework 4.x 编译器生成 EXE（64 位 Windows），无需下载工具。
+EXE 在进程内运行 PowerShell 引擎，不创建负责监测的 powershell.exe 子进程，也没有终端窗口。
+管理菜单标题为“Wi-Fi 管理菜单（可关闭）”；关闭该菜单不会主动停止独立后台任务。
+只有选择“停止/移除后台监测”或结束 WifiWatchdog.exe，才会主动停止监测；注销/关机仍会停止。
+旧版本用户选择菜单 2 会迁移旧任务至新的进程名。生成的 EXE 不纳入 Git，在目标机器本地生成。
 
 使用：
 首次使用会由管理菜单从 config.example.json 创建本机 config.json；先选 6 设置网络。
@@ -82,6 +88,7 @@ config.json 和 logs/ 仅保留在本机，Git 不跟踪，不会随代码上传
   powershell.exe -NoProfile -ExecutionPolicy Bypass -File .\Test-Policy.ps1
   powershell.exe -NoProfile -ExecutionPolicy Bypass -File .\Test-Logging.ps1
   powershell.exe -NoProfile -ExecutionPolicy Bypass -File .\Test-Management.ps1
+  powershell.exe -NoProfile -ExecutionPolicy Bypass -File .\Test-Host.ps1
 
 参考：
 https://learn.microsoft.com/en-us/windows-server/administration/windows-commands/netsh-wlan

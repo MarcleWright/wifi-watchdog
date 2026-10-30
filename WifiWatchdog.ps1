@@ -254,7 +254,8 @@ function Start-WifiWatchdog {
     Write-WatchLog 'Configuration validated.' -Event 'configuration' -Data @{ Interface = $config.InterfaceName
         Primary = $config.PrimaryProfile; Fallback = $config.FallbackProfile; PollSeconds = $config.PollSeconds
         FailureThreshold = $config.FailureThreshold; PrimaryAttempts = $config.PrimaryAttempts
-        CooldownSeconds = $config.CooldownSeconds; ConnectWaitSeconds = $config.ConnectWaitSeconds; RetentionHours = 48 }
+        CooldownSeconds = $config.CooldownSeconds; ConnectWaitSeconds = $config.ConnectWaitSeconds; RetentionHours = 48
+        ProcessName = [Diagnostics.Process]::GetCurrentProcess().ProcessName; ProcessId = $PID }
     if ($CheckOnly) {
         $profile = Get-WifiProfile $config
         $healthy = Test-WifiInternet $config
@@ -270,7 +271,7 @@ function Start-WifiWatchdog {
             Write-WatchLog 'Another watchdog is already running.' -Event 'duplicate_instance' -Level WARN
             throw 'Wi-Fi watchdog is already running in this session.'
         }
-        Write-WatchLog 'Watchdog started. Press Ctrl+C to stop.'
+        Write-WatchLog 'Watchdog started. Use the management menu to stop background monitoring.'
         $state = @{ Failures = 0; NextRecovery = [datetime]::MinValue; LastStatus = '' }
         while ($true) {
             try { Invoke-WatchCycle $config $state }

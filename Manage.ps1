@@ -115,10 +115,7 @@ function Start-WifiManagementMenu {
                 '1' { Show-WifiStatus }
                 '2' {
                     Read-WatchConfig $script:ManageConfigPath | Out-Null
-                    $task = Get-ScheduledTask -TaskName MarcleWifiWatchdog -ErrorAction SilentlyContinue
-                    if (-not $task) { & (Join-Path $script:ManageRoot 'Background.ps1') -Action Install }
-                    elseif ([string]$task.State -ne 'Running') { & (Join-Path $script:ManageRoot 'Background.ps1') -Action Start }
-                    else { Write-Host '后台已经在运行。' }
+                    & (Join-Path $script:ManageRoot 'Background.ps1') -Action Start
                 }
                 '3' { & (Join-Path $script:ManageRoot 'Background.ps1') -Action Stop }
                 '4' { & (Join-Path $script:ManageRoot 'Background.ps1') -Action Remove }
@@ -135,4 +132,19 @@ function Start-WifiManagementMenu {
     }
 }
 
-if ($MyInvocation.InvocationName -ne '.') { Start-WifiManagementMenu }
+if ($MyInvocation.InvocationName -ne '.') {
+    $previousTitle = $null
+    try {
+        try {
+            $previousTitle = $Host.UI.RawUI.WindowTitle
+            $Host.UI.RawUI.WindowTitle = 'Wi-Fi 管理菜单（可关闭）'
+        } catch { }
+        Write-Host '此窗口是管理菜单，可以关闭。后台监测进程为 WifiWatchdog.exe。'
+        Start-WifiManagementMenu
+    }
+    finally {
+        if ($null -ne $previousTitle) {
+            try { $Host.UI.RawUI.WindowTitle = $previousTitle } catch { }
+        }
+    }
+}
